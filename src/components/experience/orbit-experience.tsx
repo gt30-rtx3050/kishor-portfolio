@@ -147,7 +147,7 @@ export function OrbitExperience() {
       <h2 id="career-orbit-heading" className="sr-only">My experience — five chapters, 2018 to 2026</h2>
       <div ref={viewportRef} className="orbit-viewport">
         <div className="orbit-compact-heading" aria-hidden="true">
-          <p>CAREER<br />ORBIT</p>
+          <p>CAREER<br />OUTLINE</p>
           <div>From content to growth.<br />Five chapters in motion.</div>
         </div>
         {!compact && (
@@ -164,7 +164,7 @@ export function OrbitExperience() {
               aria-hidden="true"
               style={{ opacity: copy.opacity, transform: `translate3d(${copy.offset}px, calc(-50% - ${copy.shift}px), 0)` }}
             >
-              ORBIT
+              OUTLINE
             </div>
             <p
               className="orbit-center-copy"
