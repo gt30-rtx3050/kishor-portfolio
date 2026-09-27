@@ -25,10 +25,10 @@
   --color-fg: #ffffff;
   --color-muted: #e7e7e7;
 
-  /* Typography: Inter for body, Space Grotesk for display (self-hosted
-     variable fonts imported in src/main.tsx via Fontsource). */
-  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Space Grotesk Variable", "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  /* Typography: Archivo for body/buttons, Instrument Serif for headings
+     (self-hosted fonts imported in src/main.tsx via Fontsource). */
+  --font-sans: "Archivo Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Instrument Serif", ui-serif, Georgia, serif;
 }
 
 @layer base {
