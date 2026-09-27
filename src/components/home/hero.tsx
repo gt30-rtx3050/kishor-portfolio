@@ -104,17 +104,19 @@ export function Hero() {
           </Badge>
         </p>
 
-        <h1 className="mt-8 font-display text-[clamp(86.4px,12.6vw,182.4px)] leading-[1.04] font-normal tracking-[-0.03em] max-[799px]:text-[clamp(81.6px,14.4vw,120px)]">
+        <h1 className="mt-8 font-display text-[clamp(103.68px,15.12vw,218.88px)] leading-[1.04] font-normal tracking-[-0.03em] max-[799px]:text-[clamp(97.92px,17.28vw,144px)]">
           {/* React Bits "Tech Text": the name is a canvas, so the entrance mask
               wraps one block instead of per-character spans. The sr-only copy
               keeps the real name in the heading for screen readers and search. */}
-          <span className="block overflow-hidden pb-[0.06em] -mb-[0.06em]">
+          {/* TechText auto-fits its canvas: grow its width as well as its height
+              and font size, with a viewport cap to avoid clipping on mobile. */}
+          <span className="relative left-1/2 block w-[min(120%,calc(100vw-2rem))] -translate-x-1/2 overflow-hidden pb-[0.06em] -mb-[0.06em]">
             <span className="sr-only">{site.name}</span>
             <span data-hero="name" className="block h-[1.04em] will-change-transform" aria-hidden="true">
               <TechText
                 text={site.name}
                 fontWeight={400}
-                fontSize={180}
+                fontSize={216}
                 color="#ffffff"
                 accentColor="#ffffff"
               />
