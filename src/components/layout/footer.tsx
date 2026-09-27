@@ -30,12 +30,12 @@ export function Footer() {
           <Link
             to="/"
             aria-label={`${site.name}, back to home`}
-            className="font-display text-lg font-bold tracking-tight"
+            className="font-display text-lg font-normal tracking-tight"
           >
             {site.name}
             <span className="text-fg/40">.</span>
           </Link>
-          <p className="mt-4 max-w-xs text-sm leading-relaxed text-fg/50">
+          <p className="mt-4 max-w-xs text-sm font-light leading-relaxed text-fg/50">
             {site.role} crafting fast, accessible web products.
           </p>
           <div className="mt-6 flex items-center gap-3">

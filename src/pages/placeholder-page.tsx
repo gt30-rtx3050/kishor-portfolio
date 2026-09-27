@@ -20,12 +20,12 @@ export function PlaceholderPage({ title, blurb }: PlaceholderPageProps) {
         <Badge>Coming soon</Badge>
       </Reveal>
       <Reveal delay={0.1}>
-        <h1 className="mt-6 font-display text-4xl font-semibold tracking-tight text-balance sm:text-5xl md:text-6xl">
+        <h1 className="mt-6 font-display text-4xl font-normal tracking-tight text-balance sm:text-5xl md:text-6xl">
           {title}
         </h1>
       </Reveal>
       <Reveal delay={0.2}>
-        <p className="mt-6 max-w-xl leading-relaxed text-fg/60">{blurb}</p>
+        <p className="mt-6 max-w-xl font-light leading-relaxed text-fg/60">{blurb}</p>
       </Reveal>
       <Reveal delay={0.3} className="mt-10">
         <Button to="/" variant="secondary" size="lg">

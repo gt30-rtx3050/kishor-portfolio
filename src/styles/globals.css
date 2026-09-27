@@ -26,7 +26,10 @@
   --color-muted: #e7e7e7;
 
   /* Typography: Archivo for body/buttons, Instrument Serif for headings
-     (self-hosted fonts imported in src/main.tsx via Fontsource). */
+     (self-hosted fonts imported in src/main.tsx via Fontsource).
+     Global weight rules: headings are always Normal (400), body copy and
+     descriptions are always Light (300). Instrument Serif ships only 400,
+     so anything heavier would be browser-synthesized faux bold. */
   --font-sans: "Archivo Variable", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Instrument Serif", ui-serif, Georgia, serif;
 }
@@ -43,8 +46,19 @@
   }
 
   body {
-    @apply bg-bg font-sans text-fg antialiased;
+    @apply bg-bg font-sans font-light text-fg antialiased;
     text-rendering: optimizeLegibility;
+  }
+
+  /* Headings always render at Normal weight, never faux bold. */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .font-display {
+    font-weight: 400;
   }
 
   ::selection {

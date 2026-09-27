@@ -29,13 +29,13 @@ export function AboutPreview() {
           </Reveal>
           <h2
             id="about-heading"
-            className="mt-5 font-display text-3xl font-semibold tracking-tight text-balance sm:text-4xl md:text-5xl"
+            className="mt-5 font-display text-3xl font-normal tracking-tight text-balance sm:text-4xl md:text-5xl"
           >
             <TextReveal text={aboutPreview.heading} />
           </h2>
           {aboutPreview.paragraphs.map((paragraph) => (
             <Reveal key={paragraph.slice(0, 24)}>
-              <p className="mt-5 leading-relaxed text-fg/65">{paragraph}</p>
+              <p className="mt-5 font-light leading-relaxed text-fg/65">{paragraph}</p>
             </Reveal>
           ))}
 

@@ -75,7 +75,7 @@ export function Navbar() {
         <Link
           to="/"
           aria-label={`${site.name}, back to home`}
-          className="font-display text-lg font-bold tracking-tight"
+          className="font-display text-lg font-normal tracking-tight"
         >
           {site.name}
           <span className="text-fg/40">.</span>
@@ -144,7 +144,7 @@ export function Navbar() {
                     to={link.to}
                     className={({ isActive }) =>
                       cn(
-                        "flex items-center justify-between rounded-xl px-4 py-4 font-display text-3xl font-semibold tracking-tight transition-colors",
+                        "flex items-center justify-between rounded-xl px-4 py-4 font-display text-3xl font-normal tracking-tight transition-colors",
                         isActive ? "text-fg" : "text-fg/60 hover:text-fg",
                       )
                     }

@@ -127,11 +127,11 @@ export function Hero() {
           </Badge>
         </p>
 
-        <h1 className="mt-8 font-display text-[clamp(2.9rem,9vw,7.5rem)] leading-[1.04] font-bold tracking-[-0.03em]">
+        <h1 className="mt-8 font-display text-[clamp(2.9rem,9vw,7.5rem)] leading-[1.04] font-normal tracking-[-0.03em]">
           <span className="block">
             <SplitChars text={site.name} />
           </span>
-          <span className="mt-2 block overflow-hidden pb-[0.12em] -mb-[0.12em] text-[clamp(1.35rem,3.4vw,2.75rem)] font-medium tracking-[-0.02em] text-fg/55">
+          <span className="mt-2 block overflow-hidden pb-[0.12em] -mb-[0.12em] text-[clamp(1.35rem,3.4vw,2.75rem)] font-normal tracking-[-0.02em] text-fg/55">
             <span data-hero="role" className="block will-change-transform">
               {site.role}
             </span>
@@ -140,7 +140,7 @@ export function Hero() {
 
         <p
           data-hero="fade"
-          className="mt-8 max-w-xl text-base leading-relaxed text-muted/90 sm:text-lg"
+          className="mt-8 max-w-xl text-base font-light leading-relaxed text-muted/90 sm:text-lg"
         >
           {site.intro}
         </p>
