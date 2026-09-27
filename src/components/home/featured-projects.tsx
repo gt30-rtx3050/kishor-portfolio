@@ -230,11 +230,11 @@ export function FeaturedProjects() {
               <div className="experience-image-wrap">
                 <img src={experience.image} alt={experience.imageAlt} loading="lazy" draggable={false} />
                 <span className="experience-image-index">{String(index + 1).padStart(2, "0")} / {String(experiences.length).padStart(2, "0")}</span>
-                <span className="experience-years">{experience.years}</span>
               </div>
               <div className="experience-card-body">
-                <p className="experience-role">{experience.role}</p>
                 <h3>{experience.company}</h3>
+                <p className="experience-role">{experience.role}</p>
+                <p className="experience-years">{experience.years}</p>
                 <a className="experience-cta" href="#contact" onClick={(event) => event.stopPropagation()} onFocus={() => goTo(index)}>
                   Let’s talk <ArrowUpRightIcon className="size-4" />
                 </a>
