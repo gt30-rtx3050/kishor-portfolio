@@ -18,12 +18,14 @@ npm run lint      # eslint
 
 ```
 src/
-  assets/            # placeholder project images + portrait (self-hosted by Vite)
+  assets/            # project images, portrait, experience card artwork
   components/
     animate-ui/      # Animate UI adaptations: TextReveal, BlurFade
     background/      # ReactBits-style ParticleGrid canvas (hero)
+    experience/      # Orbit career scene + its scroll math
     home/            # Hero, FeaturedProjects, AboutPreview, SkillsStrip, ContactCTA
     layout/          # Navbar, Footer, RootLayout, ScrollToTop
+    react-bits/      # TechText (React Bits "Tech Text"), used for the hero name
     ui/              # Button, Badge, ArrowLink, SectionHeading, Reveal, icons
   lib/               # site.ts (all copy), tokens.ts, mui-theme.ts, utils.ts
   pages/             # home-page + placeholders for the 4 upcoming pages
@@ -41,7 +43,7 @@ src/
 | Flowbite React | `Footer`, `FooterCopyright`, `FooterIcon`, `FooterTitle`. |
 | MUI (sparingly) | Tooltips on the skills strip. Themed in `src/lib/mui-theme.ts`. |
 | Animate UI (adapted) | `TextReveal` (word masks) and `BlurFade` (skills stagger) in `components/animate-ui/`. |
-| ReactBits (adapted) | `ParticleGrid` interactive dot field in `components/background/`. |
+| ReactBits (adapted) | `ParticleGrid` interactive dot field in `components/background/`; `TechText` hero heading in `components/react-bits/` (vendored verbatim from the React Bits source, MIT). |
 | Framer Motion | All scroll reveals, hover micro-interactions, navbar drawer, page transitions. `MotionConfig reducedMotion="user"` globally. |
 | GSAP + ScrollTrigger | Hero only: entrance timeline (per-character name reveal) and scroll parallax. The two libraries never own the same effect. |
 
@@ -50,13 +52,23 @@ src/
 - Colors: `src/styles/globals.css` (`@theme` block defines `--color-bg`, `--color-fg`, `--color-muted`, `--color-accent`, consumed as `bg-bg`, `text-fg`, `text-muted`, `bg-accent`, ...). The first three are the neutral palette; `--color-accent` (#ff0000) is the Quick Scan Button's Accent Color, the one hue the global button introduces. These hex values are also mirrored in `src/lib/tokens.ts`, which feeds `src/heroui.ts` and `src/lib/mui-theme.ts`. Change both places together.
 - Fonts: self-hosted via Fontsource, imported in `src/main.tsx`. Families are mapped in the same `@theme` block: `--font-sans` (Archivo Variable, body), `--font-display` (Instrument Serif, headlines), and `--font-scan` (Inter — the global button's label, as in the reference component). To swap a font, change the import and the `--font-*` token; no component edits.
 - Copy: everything (name, role, email, socials, projects, skills, about text) lives in `src/lib/site.ts` with `PLACEHOLDER` markers on every value to replace.
-- Images: swap the files in `src/assets/projects/` and `src/assets/about/` (keep the filenames, or update the imports at the top of `site.ts`). Alt text placeholders are in `site.ts` too.
+- Images: swap the files in `src/assets/projects/` and `src/assets/about/` (keep the filenames, or update the imports at the top of `site.ts`). Alt text placeholders are in `site.ts` too. The five career cards read their artwork from `src/assets/experience/`, bound in `src/lib/experiences.ts` — keep those `new URL(..., import.meta.url)` paths as static literals so Vite can rewrite them.
+
+## The hero heading
+
+The name in the hero `<h1>` is drawn by **React Bits "Tech Text"** (`src/components/react-bits/tech-text.tsx`, vendored verbatim from the React Bits MIT source). It is a canvas component, not DOM text, so:
+
+- The component auto-sizes the wordmark to its box: it fits to 90% of the width and 66% of the height. The wrapper is `h-[1.04em]` of the heading's `clamp()` size, which lands the name on almost exactly the same pixel size the old CSS produced. Change the clamp and the canvas follows.
+- The typeface comes from CSS inheritance, not a hardcoded prop: the wrapper sits inside the `font-display` heading, so swapping `--font-display` in `globals.css` is enough. `fontWeight` is pinned to `400` because Instrument Serif only ships 400 and anything heavier would be browser-synthesized faux bold.
+- A visually hidden copy of the name stays in the heading and the canvas is `aria-hidden`, so screen readers and crawlers still get real text.
+- Pointer interactions (hover outline, selection frame, dragging a letter) need a real pointer; touch drags a letter too, and the container is `touch-action: pan-y` so the page still scrolls.
+- With `prefers-reduced-motion` the component skips its idle sweep and renders the static solid wordmark.
 
 ## Accessibility and motion
 
 - Semantic landmarks, single h1 per page, heading hierarchy, skip link, focus-visible outlines, aria-labels on icon-only controls, mobile drawer with Escape close, scroll lock, and focus move.
-- `prefers-reduced-motion`: Framer Motion is simplified globally via `MotionConfig`, both text-reveal components render plain text, GSAP timelines are skipped, and the particle field renders one static frame with no loop.
-- Canvas and decorative layers are `aria-hidden`; split-text headings carry a visually hidden copy for screen readers.
+- `prefers-reduced-motion`: Framer Motion is simplified globally via `MotionConfig`, both text-reveal components render plain text, GSAP timelines are skipped, the particle field renders one static frame with no loop, and the hero TechText skips its idle sweep.
+- Canvas and decorative layers are `aria-hidden`; split-text headings carry a visually hidden copy for screen readers, and the canvas hero name does the same (hidden copy in the heading, `aria-hidden` canvas beside it).
 
 ## Adding the next pages
 

@@ -3,6 +3,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion } from "framer-motion";
 import { site } from "@/lib/site";
+import TechText from "@/components/react-bits/tech-text";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,39 +16,15 @@ import {
 gsap.registerPlugin(ScrollTrigger);
 
 /*
-  Splits the name into per-character masks for the GSAP entrance.
-  Visual only: the wrapper keeps an aria-label and each char span is
-  aria-hidden, so screen readers hear the name as one string.
-*/
-function SplitChars({ text }: { text: string }) {
-  const words = text.split(" ");
-  return (
-    <span>
-      {/* Screen readers get the plain name; the split characters are hidden. */}
-      <span className="sr-only">{text}</span>
-      <span aria-hidden="true">
-        {words.map((word, wordIndex) => (
-          <span key={wordIndex} className="inline-block whitespace-nowrap">
-            {word.split("").map((char, charIndex) => (
-              <span key={charIndex} className="inline-block overflow-hidden pb-[0.1em] -mb-[0.1em]">
-                <span data-hero="char" className="inline-block will-change-transform">
-                  {char}
-                </span>
-              </span>
-            ))}
-            {wordIndex < words.length - 1 ? <span className="inline-block">&nbsp;</span> : null}
-          </span>
-        ))}
-      </span>
-    </span>
-  );
-}
-
-/*
   Hero: full viewport height with the site's single GSAP moment.
-  GSAP owns the entrance timeline (per-character name reveal + staggered
+  GSAP owns the entrance timeline (masked heading reveal + staggered
   support elements) and the scroll-linked parallax. Everything else on the
   page uses Framer Motion, so each effect has exactly one owner.
+
+  The name is drawn by the React Bits "Tech Text" canvas component, which
+  owns its own rAF loop for the pointer/sweep outline reveal, the selection
+  frame and the draggable-letter spring. The container is a single element,
+  so the entrance masks that one block instead of per-character spans.
 */
 export function Hero() {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -67,9 +44,9 @@ export function Hero() {
       const timeline = gsap.timeline({ delay: 0.15, defaults: { ease: "power4.out" } });
       timeline
         .fromTo(
-          "[data-hero='char']",
-          { yPercent: 115 },
-          { yPercent: 0, duration: 1.05, stagger: 0.03 },
+          "[data-hero='name']",
+          { yPercent: 118 },
+          { yPercent: 0, duration: 1.05 },
           0,
         )
         .fromTo("[data-hero='role']", { yPercent: 115 }, { yPercent: 0, duration: 0.9 }, 0.4)
@@ -128,8 +105,20 @@ export function Hero() {
         </p>
 
         <h1 className="mt-8 font-display text-[clamp(2.9rem,9vw,7.5rem)] leading-[1.04] font-normal tracking-[-0.03em]">
-          <span className="block">
-            <SplitChars text={site.name} />
+          {/* React Bits "Tech Text": the name is a canvas, so the entrance mask
+              wraps one block instead of per-character spans. The sr-only copy
+              keeps the real name in the heading for screen readers and search. */}
+          <span className="block overflow-hidden pb-[0.06em] -mb-[0.06em]">
+            <span className="sr-only">{site.name}</span>
+            <span data-hero="name" className="block h-[1.04em] will-change-transform" aria-hidden="true">
+              <TechText
+                text={site.name}
+                fontWeight={400}
+                fontSize={150}
+                color="#ffffff"
+                accentColor="#ffffff"
+              />
+            </span>
           </span>
           <span className="mt-2 block overflow-hidden pb-[0.12em] -mb-[0.12em] text-[clamp(1.35rem,3.4vw,2.75rem)] font-normal tracking-[-0.02em] text-fg/85">
             <span data-hero="role" className="block px-[0.08em] italic will-change-transform">
