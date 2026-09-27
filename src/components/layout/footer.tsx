@@ -6,6 +6,7 @@ import {
   FooterTitle,
 } from "flowbite-react";
 import { navLinks, site } from "@/lib/site";
+import { SiteLogo } from "@/components/layout/site-logo";
 import { GitHubIcon, LinkedInIcon, MailIcon, MapPinIcon, XIcon } from "@/components/ui/icons";
 
 /*
@@ -27,14 +28,7 @@ export function Footer() {
     <FlowbiteFooter className="border-t border-fg/10 bg-bg dark:bg-bg">
       <div className="shell grid gap-12 py-16 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)]">
         <div>
-          <Link
-            to="/"
-            aria-label={`${site.name}, back to home`}
-            className="font-display text-lg font-normal tracking-tight"
-          >
-            {site.name}
-            <span className="text-fg/40">.</span>
-          </Link>
+          <SiteLogo imageClassName="h-8 md:h-8" />
           <p className="mt-4 max-w-xs text-sm font-light leading-relaxed text-fg/50">
             {site.role} crafting fast, accessible web products.
           </p>
