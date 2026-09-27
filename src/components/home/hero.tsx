@@ -131,8 +131,8 @@ export function Hero() {
           <span className="block">
             <SplitChars text={site.name} />
           </span>
-          <span className="mt-2 block overflow-hidden pb-[0.12em] -mb-[0.12em] text-[clamp(1.35rem,3.4vw,2.75rem)] font-normal tracking-[-0.02em] text-fg/55">
-            <span data-hero="role" className="block will-change-transform">
+          <span className="mt-2 block overflow-hidden pb-[0.12em] -mb-[0.12em] text-[clamp(1.35rem,3.4vw,2.75rem)] font-normal tracking-[-0.02em] text-fg/85">
+            <span data-hero="role" className="block px-[0.08em] italic will-change-transform">
               {site.role}
             </span>
           </span>
