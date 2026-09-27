@@ -29,14 +29,14 @@ export interface Skill {
 
 export const site = {
   // PLACEHOLDER: your name (used in the navbar, hero, footer, page title).
-  name: "Your Name",
+  name: "Kishor Shahi Thakuri",
   // PLACEHOLDER: your role (hero headline, meta description).
-  role: "Full-Stack Developer",
+  role: "Performance Marketing Specialist",
   // PLACEHOLDER: one sentence positioning statement.
   tagline: "I build fast, accessible products for the web.",
   // PLACEHOLDER: hero supporting paragraph.
   intro:
-    "I design and build web experiences from first commit to production: resilient APIs, thoughtful interfaces, and the details in between.",
+    "I drive performance from launch to scale: precision targeting, creative that converts, and the testing and optimization in between.",
   // PLACEHOLDER: your email (mailto links).
   email: "hello@example.com",
   // PLACEHOLDER: where you are based.
