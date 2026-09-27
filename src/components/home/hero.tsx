@@ -101,7 +101,7 @@ export function Hero() {
     <section
       ref={sectionRef}
       aria-label="Introduction"
-      className="relative flex min-h-svh items-center overflow-hidden"
+      className="relative flex min-h-svh items-center justify-center overflow-hidden"
     >
       <video
         aria-hidden="true"
@@ -116,7 +116,7 @@ export function Hero() {
       </video>
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-black/50" />
 
-      <div ref={contentRef} className="shell relative pb-28 pt-32">
+      <div ref={contentRef} className="shell relative flex flex-col items-center py-32 text-center">
         <p data-hero="fade">
           <Badge>
             <span className="relative flex size-1.5">
@@ -145,7 +145,7 @@ export function Hero() {
           {site.intro}
         </p>
 
-        <div data-hero="fade" className="mt-10 flex flex-wrap items-center gap-4">
+        <div data-hero="fade" className="mt-10 flex flex-wrap items-center justify-center gap-4">
           <Button to="/projects" size="lg">
             View Work
             <ArrowRightIcon className="size-4" />
@@ -156,7 +156,7 @@ export function Hero() {
           </Button>
         </div>
 
-        <p data-hero="fade" className="mt-14 flex items-center gap-2 text-sm text-fg/45">
+        <p data-hero="fade" className="mt-14 flex items-center justify-center gap-2 text-sm text-fg/45">
           <MapPinIcon className="size-4" />
           {site.location}
         </p>
