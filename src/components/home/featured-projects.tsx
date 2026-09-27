@@ -34,12 +34,12 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             </div>
             <div className="flex grow flex-col gap-3 p-6">
               <div className="flex items-center justify-between gap-3">
-                <h3 className="font-display text-xl font-semibold tracking-tight">
+                <h3 className="font-display text-xl font-normal tracking-tight">
                   {project.title}
                 </h3>
                 <ArrowUpRightIcon className="size-5 shrink-0 text-fg/40 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-fg" />
               </div>
-              <p className="text-sm leading-relaxed text-fg/60">{project.description}</p>
+              <p className="text-sm font-light leading-relaxed text-fg/60">{project.description}</p>
               <ul className="mt-1 flex flex-wrap gap-2" aria-label="Technologies used">
                 {project.tags.map((tag) => (
                   <Chip

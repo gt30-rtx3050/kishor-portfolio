@@ -19,12 +19,12 @@ export function ContactCTA() {
         </Reveal>
         <h2
           id="contact-heading"
-          className="mt-6 max-w-3xl font-display text-4xl font-semibold tracking-tight text-balance sm:text-5xl md:text-6xl"
+          className="mt-6 max-w-3xl font-display text-4xl font-normal tracking-tight text-balance sm:text-5xl md:text-6xl"
         >
           <TextReveal text={contactCta.heading} delay={0.1} />
         </h2>
         <Reveal delay={0.2}>
-          <p className="mt-6 max-w-xl text-base leading-relaxed text-fg/60 sm:text-lg">
+          <p className="mt-6 max-w-xl text-base font-light leading-relaxed text-fg/60 sm:text-lg">
             {contactCta.copy}
           </p>
         </Reveal>

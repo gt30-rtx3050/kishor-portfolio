@@ -46,7 +46,7 @@ export function SectionHeading({
         </Reveal>
         <h2
           id={id}
-          className="mt-5 font-display text-3xl font-semibold tracking-tight text-balance sm:text-4xl md:text-5xl"
+          className="mt-5 font-display text-3xl font-normal tracking-tight text-balance sm:text-4xl md:text-5xl"
         >
           <TextReveal text={title} />
         </h2>
