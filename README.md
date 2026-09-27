@@ -35,7 +35,8 @@ src/
 
 | Library | Used for |
 | --- | --- |
-| Untitled UI | Design language for the `ui/` primitives (Button, Badge, SectionHeading patterns). |
+| Untitled UI | Design language for the `ui/` primitives (Badge, SectionHeading, ArrowLink patterns). |
+| Quick Scan Button (Framer) | The global `ui/button.tsx`: a frame-accurate port of the free Framer component "Quick Scan Button" (scanbutton.framer.website) — viewfinder markers that morph cross ↔ bracket, accent fill, 1s `[0.44,0,0,1]` tween, per-character label cascade. |
 | HeroUI | Project cards (`Card`, `Chip`), `HeroUIProvider` wired to React Router. Theme remapped to the palette in `src/heroui.ts`. |
 | Flowbite React | `Footer`, `FooterCopyright`, `FooterIcon`, `FooterTitle`. |
 | MUI (sparingly) | Tooltips on the skills strip. Themed in `src/lib/mui-theme.ts`. |
@@ -46,8 +47,8 @@ src/
 
 ## Editing colors, fonts, and copy
 
-- Colors: `src/styles/globals.css` (`@theme` block defines `--color-bg`, `--color-fg`, `--color-muted`, consumed as `bg-bg`, `text-fg`, `text-muted`, ...). These three hex values are also mirrored in `src/lib/tokens.ts`, which feeds `src/heroui.ts` and `src/lib/mui-theme.ts`. Change all three places together.
-- Fonts: self-hosted via Fontsource, imported in `src/main.tsx`. Families are mapped in the same `@theme` block: `--font-sans` (Archivo Variable, body + buttons) and `--font-display` (Instrument Serif, headlines). To swap a font, change the import and the `--font-*` token; no component edits.
+- Colors: `src/styles/globals.css` (`@theme` block defines `--color-bg`, `--color-fg`, `--color-muted`, `--color-accent`, consumed as `bg-bg`, `text-fg`, `text-muted`, `bg-accent`, ...). The first three are the neutral palette; `--color-accent` (#ff0000) is the Quick Scan Button's Accent Color, the one hue the global button introduces. These hex values are also mirrored in `src/lib/tokens.ts`, which feeds `src/heroui.ts` and `src/lib/mui-theme.ts`. Change both places together.
+- Fonts: self-hosted via Fontsource, imported in `src/main.tsx`. Families are mapped in the same `@theme` block: `--font-sans` (Archivo Variable, body), `--font-display` (Instrument Serif, headlines), and `--font-scan` (Inter — the global button's label, as in the reference component). To swap a font, change the import and the `--font-*` token; no component edits.
 - Copy: everything (name, role, email, socials, projects, skills, about text) lives in `src/lib/site.ts` with `PLACEHOLDER` markers on every value to replace.
 - Images: swap the files in `src/assets/projects/` and `src/assets/about/` (keep the filenames, or update the imports at the top of `site.ts`). Alt text placeholders are in `site.ts` too.
 
