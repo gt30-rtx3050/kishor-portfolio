@@ -37,8 +37,6 @@ export const site = {
   // PLACEHOLDER: hero supporting paragraph.
   intro:
     "I drive performance from launch to scale: precision targeting, creative that converts, and the testing and optimization in between.",
-  // Brand line repeated in the animated home-page transition after the hero.
-  marketingLoop: "Next-Gen Performance Marketing",
   // PLACEHOLDER: your email (mailto links).
   email: "hello@example.com",
   // PLACEHOLDER: where you are based.
