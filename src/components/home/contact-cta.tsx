@@ -7,7 +7,7 @@ import { ArrowRightIcon, MailIcon } from "@/components/ui/icons";
 
 export function ContactCTA() {
   return (
-    <section aria-labelledby="contact-heading" className="relative overflow-hidden border-t border-fg/10">
+    <section id="contact" aria-labelledby="contact-heading" className="relative overflow-hidden border-t border-fg/10">
       {/* Soft white glow rising from the bottom edge, palette-safe. */}
       <div
         aria-hidden="true"
