@@ -30,7 +30,7 @@ The saved HTML alone has only one frame of transforms and refers to a companion 
 ## Intentional content/integration changes
 
 - Five cards with the user's exact company names, roles, and dates instead of six image-only project cards. The source spaces cards using `index / itemCount`, so five cards are distributed evenly using the same formula.
-- The first five reference image URLs are retained as decorative artwork. The uploaded HTML did not include their binary files. These remain external requests; a failed request displays a CSS surface instead of a broken image. The artwork is not represented as work created for these employers.
+- The five reference artwork images were replaced. The originals only existed as Framer CDN URLs with no binary in the upload, and they showed unrelated abstract stock. Each card now uses an image generated for this repository in `src/assets/experience/`, chosen to match that employer's industry (web development, editorial planning, e-commerce fulfilment, Himalayan trekking, clinical care), self-hosted through Vite so the cards make no third-party requests. They are decorative, `alt=""` + `aria-hidden`, and are not represented as work created for these employers. A CSS surface remains as the fallback if an image ever fails to decode.
 - HTML headings, role descriptions, dates and a contrast gradient have been added to the cards. Unlike the reference, the cards are not links to unrelated projects.
 - “CAREER / ORBIT” and career-specific center copy replace “ORBIT / PROJECTS”.
 - An original introductory hero uses the portfolio's existing Instrument Serif/Archivo typography. The shared navigation/footer and existing `/projects` Experience URL are preserved.
