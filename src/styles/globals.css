@@ -20,18 +20,25 @@
 @source "../../.flowbite-react/class-list.json";
 
 @theme {
-  /* Palette: black background, white foreground, #e7e7e7 muted. No other hues. */
+  /* Palette: black background, white foreground, #e7e7e7 muted.
+     The one exception is --color-accent: the exact "Accent Color" default of
+     the Quick Scan Button reference component (scanbutton.framer.website),
+     used by the global button. Nothing else may introduce a hue. */
   --color-bg: #000000;
   --color-fg: #ffffff;
   --color-muted: #e7e7e7;
+  --color-accent: #ff0000;
 
   /* Typography: Archivo for body/buttons, Instrument Serif for headings
      (self-hosted fonts imported in src/main.tsx via Fontsource).
      Global weight rules: headings are always Normal (400), body copy and
      descriptions are always Light (300). Instrument Serif ships only 400,
-     so anything heavier would be browser-synthesized faux bold. */
+     so anything heavier would be browser-synthesized faux bold.
+     --font-scan is Inter 400 — the label typeface of the reference button,
+     applied by the global Button so it renders exactly like the original. */
   --font-sans: "Archivo Variable", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Instrument Serif", ui-serif, Georgia, serif;
+  --font-scan: "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer base {

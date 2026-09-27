@@ -100,7 +100,10 @@ export function Navbar() {
         </ul>
 
         <div className="flex items-center gap-2">
-          <Button to="/contact" className="hidden md:inline-flex">
+          {/* max-md:hidden (not hidden md:inline-flex): the Button root sets
+              display:inline-flex, and Tailwind v4 emits variant utilities after
+              base ones, so max-md:hidden reliably wins below the breakpoint. */}
+          <Button to="/contact" className="max-md:hidden">
             Let&apos;s Talk
           </Button>
           <button
