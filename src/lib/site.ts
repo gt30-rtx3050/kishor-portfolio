@@ -107,20 +107,22 @@ export const aboutPreview = {
   imageAlt: "PLACEHOLDER: replace with a photo of you",
 } as const;
 
-/* PLACEHOLDER skills: names plus the short tooltip note for each. */
+/* Digital marketing tools plus the short tooltip note for each. */
 export const skills: Skill[] = [
-  { name: "TypeScript", note: "Primary language, 5+ years" },
-  { name: "React", note: "Daily driver for UI work" },
-  { name: "Next.js", note: "SSR and edge rendering" },
-  { name: "Node.js", note: "APIs, tooling, and services" },
-  { name: "PostgreSQL", note: "Schema design and query tuning" },
-  { name: "GraphQL", note: "Typed data layers" },
-  { name: "Tailwind CSS", note: "Design systems at speed" },
-  { name: "Docker", note: "Reproducible environments" },
-  { name: "AWS", note: "Hosting and CI/CD" },
-  { name: "Redis", note: "Caching and queues" },
-  { name: "Vitest", note: "Testing across the stack" },
-  { name: "Figma", note: "Prototyping and handoff" },
+  { name: "Google Analytics", note: "Website traffic and conversion insights" },
+  { name: "HubSpot", note: "CRM and marketing automation" },
+  { name: "Paid Marketing", note: "Paid campaigns and audience targeting" },
+  { name: "WordPress", note: "Website and content management" },
+  { name: "Looker Studio", note: "Marketing dashboards and data visualization" },
+  { name: "Google DV 360", note: "Programmatic advertising and campaign management" },
+  { name: "Next JS", note: "Fast, search-friendly websites" },
+  { name: "React", note: "Interactive web experiences" },
+  { name: "Brightlocal", note: "Local SEO and reputation management" },
+  { name: "Semrush", note: "SEO research and competitor insights" },
+  { name: "Klaviyo", note: "Email and SMS marketing automation" },
+  { name: "Asana", note: "Project and campaign coordination" },
+  { name: "GHL", note: "CRM, funnels, and marketing automation" },
+  { name: "AgencyAnalytics", note: "Client reporting and marketing dashboards" },
 ];
 
 /* PLACEHOLDER contact section copy. */
