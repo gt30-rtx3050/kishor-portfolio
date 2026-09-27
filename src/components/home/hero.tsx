@@ -1,0 +1,179 @@
+import { useLayoutEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { motion } from "framer-motion";
+import { site } from "@/lib/site";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  ArrowRightIcon,
+  ChevronDownIcon,
+  MailIcon,
+  MapPinIcon,
+} from "@/components/ui/icons";
+import { ParticleGrid } from "@/components/background/particle-grid";
+
+gsap.registerPlugin(ScrollTrigger);
+
+/*
+  Splits the name into per-character masks for the GSAP entrance.
+  Visual only: the wrapper keeps an aria-label and each char span is
+  aria-hidden, so screen readers hear the name as one string.
+*/
+function SplitChars({ text }: { text: string }) {
+  const words = text.split(" ");
+  return (
+    <span>
+      {/* Screen readers get the plain name; the split characters are hidden. */}
+      <span className="sr-only">{text}</span>
+      <span aria-hidden="true">
+        {words.map((word, wordIndex) => (
+          <span key={wordIndex} className="inline-block whitespace-nowrap">
+            {word.split("").map((char, charIndex) => (
+              <span key={charIndex} className="inline-block overflow-hidden pb-[0.1em] -mb-[0.1em]">
+                <span data-hero="char" className="inline-block will-change-transform">
+                  {char}
+                </span>
+              </span>
+            ))}
+            {wordIndex < words.length - 1 ? <span className="inline-block">&nbsp;</span> : null}
+          </span>
+        ))}
+      </span>
+    </span>
+  );
+}
+
+/*
+  Hero: full viewport height with the site's single GSAP moment.
+  GSAP owns the entrance timeline (per-character name reveal + staggered
+  support elements) and the scroll-linked parallax. Everything else on the
+  page uses Framer Motion, so each effect has exactly one owner.
+*/
+export function Hero() {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const contentRef = useRef<HTMLDivElement | null>(null);
+
+  useLayoutEffect(() => {
+    const section = sectionRef.current;
+    const content = contentRef.current;
+    if (!section || !content) return;
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const ctx = gsap.context(() => {
+      // Reduced motion: default markup is already the final visible state.
+      if (reduceMotion) return;
+
+      const timeline = gsap.timeline({ delay: 0.15, defaults: { ease: "power4.out" } });
+      timeline
+        .fromTo(
+          "[data-hero='char']",
+          { yPercent: 115 },
+          { yPercent: 0, duration: 1.05, stagger: 0.03 },
+          0,
+        )
+        .fromTo("[data-hero='role']", { yPercent: 115 }, { yPercent: 0, duration: 0.9 }, 0.4)
+        .fromTo(
+          "[data-hero='fade']",
+          { y: 24, autoAlpha: 0 },
+          { y: 0, autoAlpha: 1, duration: 0.8, stagger: 0.09 },
+          0.55,
+        );
+
+      // Scroll parallax: hero content drifts up and dims as it leaves view.
+      gsap.to(content, {
+        yPercent: -12,
+        autoAlpha: 0.3,
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top top",
+          end: "bottom 20%",
+          scrub: true,
+        },
+      });
+    }, section);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <section
+      ref={sectionRef}
+      aria-label="Introduction"
+      className="relative flex min-h-svh items-center overflow-hidden"
+    >
+      {/* Animated dot field, masked toward the center so edges fade out. */}
+      <ParticleGrid className="absolute inset-0 [mask-image:radial-gradient(ellipse_75%_65%_at_50%_45%,black_35%,transparent_100%)]" />
+      {/* Soft vignette keeps text legible over the dots. */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_45%,rgba(0,0,0,0.65),transparent_75%)]"
+      />
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-bg"
+      />
+
+      <div ref={contentRef} className="shell relative pb-28 pt-32">
+        <p data-hero="fade">
+          <Badge>
+            <span className="relative flex size-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-fg opacity-60" />
+              <span className="relative inline-flex size-1.5 rounded-full bg-fg" />
+            </span>
+            {site.availability}
+          </Badge>
+        </p>
+
+        <h1 className="mt-8 font-display text-[clamp(2.9rem,9vw,7.5rem)] leading-[1.04] font-bold tracking-[-0.03em]">
+          <span className="block">
+            <SplitChars text={site.name} />
+          </span>
+          <span className="mt-2 block overflow-hidden pb-[0.12em] -mb-[0.12em] text-[clamp(1.35rem,3.4vw,2.75rem)] font-medium tracking-[-0.02em] text-fg/55">
+            <span data-hero="role" className="block will-change-transform">
+              {site.role}
+            </span>
+          </span>
+        </h1>
+
+        <p
+          data-hero="fade"
+          className="mt-8 max-w-xl text-base leading-relaxed text-muted/90 sm:text-lg"
+        >
+          {site.intro}
+        </p>
+
+        <div data-hero="fade" className="mt-10 flex flex-wrap items-center gap-4">
+          <Button to="/projects" size="lg">
+            View Work
+            <ArrowRightIcon className="size-4" />
+          </Button>
+          <Button href={`mailto:${site.email}`} variant="secondary" size="lg">
+            <MailIcon className="size-4" />
+            Contact Me
+          </Button>
+        </div>
+
+        <p data-hero="fade" className="mt-14 flex items-center gap-2 text-sm text-fg/45">
+          <MapPinIcon className="size-4" />
+          {site.location}
+        </p>
+      </div>
+
+      {/* Scroll cue: GSAP fades the wrapper, Framer bounces the chevron. */}
+      <div data-hero="fade" className="absolute inset-x-0 bottom-8 flex justify-center">
+        <motion.a
+          href="#work"
+          aria-label="Scroll to featured work"
+          className="inline-flex rounded-md p-2 text-fg/50 transition-colors hover:text-fg"
+          animate={{ y: [0, 6, 0] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <ChevronDownIcon className="size-6" />
+        </motion.a>
+      </div>
+    </section>
+  );
+}
