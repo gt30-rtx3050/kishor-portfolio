@@ -1,0 +1,286 @@
+/* Page-specific styles: the existing home carousel is intentionally untouched. */
+.experience-page-hero {
+  position: sticky;
+  top: 0;
+  display: flex;
+  min-height: 100svh;
+  align-items: center;
+  overflow: clip;
+  background: #000;
+}
+
+.experience-page-hero-inner {
+  position: relative;
+  padding-block: 136px 144px;
+  text-align: center;
+}
+
+.experience-page-eyebrow {
+  margin: 0 0 32px;
+  color: rgb(255 255 255 / 50%);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.experience-page-hero h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(72px, 10.5vw, 152px);
+  line-height: 0.94;
+  letter-spacing: -0.035em;
+}
+
+.experience-page-hero h1 > span { display: block; }
+.experience-page-hero h1 > span + span { color: #aaa; font-style: italic; }
+
+.experience-page-summary {
+  margin: 32px auto 0;
+  max-width: 390px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: rgb(255 255 255 / 56%);
+  text-wrap: balance;
+}
+
+.experience-page-scroll {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: rgb(255 255 255 / 60%);
+  white-space: nowrap;
+  transition: color 180ms ease;
+}
+.experience-page-scroll:hover { color: #fff; }
+
+/* Original published Orbit configuration: 460vh runway, 1300px perspective,
+   144px Inter titles, warm gray surface, and 800 / 640px breakpoints. */
+.career-orbit {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 460vh;
+  background: rgb(232 228 227);
+  color: rgb(29 24 22);
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+}
+
+.orbit-viewport {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100svh;
+  min-height: 600px;
+  overflow: hidden;
+  background: rgb(232 228 227);
+  perspective: 1300px;
+  perspective-origin: 50% 50%;
+  transform-style: preserve-3d;
+  isolation: isolate;
+}
+
+.orbit-title {
+  position: absolute;
+  left: 50%;
+  z-index: 0;
+  width: max-content;
+  margin: 0;
+  pointer-events: none;
+  font-size: 144px;
+  font-weight: 400;
+  letter-spacing: -0.075em;
+  line-height: 0.86;
+  white-space: nowrap;
+  will-change: transform, opacity;
+}
+.orbit-title--left { top: 56%; }
+.orbit-title--right { top: 39%; }
+
+.orbit-center-copy {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  max-width: 80vw;
+  margin: 0;
+  padding: 16px;
+  transform: translate3d(-50%, -50%, 0);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 22px;
+  text-align: center;
+  pointer-events: none;
+}
+
+.orbit-cards {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  transform-style: preserve-3d;
+}
+
+.orbit-card {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  container-type: inline-size;
+  transform-origin: 50% 50%;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.orbit-card-surface {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #333;
+  box-shadow: var(--orbit-shadow, 0 36px 100px rgb(0 0 0 / 12%));
+  color: #fff;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* A quiet fallback when a third-party artwork request is unavailable.
+   Never substitute an unrelated employer logo or leave broken-image icons. */
+.orbit-card-surface--1 { background: radial-gradient(ellipse at 75% 15%, #aaa, #424242 55%, #222); }
+.orbit-card-surface--2 { background: linear-gradient(135deg, #494c45, #191e1c); }
+.orbit-card-surface--3 { background: radial-gradient(ellipse at 70% 15%, #786551, #342c24 70%); }
+.orbit-card-surface--4 { background: linear-gradient(155deg, #777d71, #242b29); }
+.orbit-card-surface--5 { background: radial-gradient(ellipse at 80% 10%, #717d83, #24292e 80%); }
+
+.orbit-card-artwork {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+  pointer-events: none;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.orbit-card-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgb(0 0 0 / 40%), transparent 26%, rgb(0 0 0 / 30%) 40%, rgb(0 0 0 / 92%) 100%);
+}
+
+.orbit-card-meta {
+  position: absolute;
+  inset: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6cqw 6.5cqw;
+  font-size: 4cqw;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  font-variant-numeric: tabular-nums;
+}
+.orbit-card-meta p { margin: 0; }
+
+.orbit-card-copy {
+  position: absolute;
+  inset: auto 0 0;
+  padding: 6.5cqw;
+}
+.orbit-card-copy h3 {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  font-size: 7.3cqw;
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  line-height: 1.12;
+  text-wrap: balance;
+}
+.orbit-card-copy p {
+  margin: 3cqw 0 0;
+  color: rgb(255 255 255 / 85%);
+  font-size: 4.4cqw;
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.orbit-compact-heading { display: none; }
+
+.career-orbit--compact { height: auto; }
+.career-orbit--compact .orbit-viewport {
+  position: relative;
+  height: auto;
+  min-height: 0;
+  perspective: none;
+  transform-style: flat;
+}
+.career-orbit--compact .orbit-compact-heading { display: block; }
+.career-orbit--compact .orbit-title,
+.career-orbit--compact .orbit-center-copy { display: none; }
+.career-orbit--compact .orbit-cards {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  transform-style: flat;
+}
+.career-orbit--compact .orbit-card {
+  position: relative;
+  left: auto;
+  top: auto;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1.33;
+  transform: none;
+  transform-style: flat;
+}
+.career-orbit--compact .orbit-card-surface {
+  border-radius: 8px;
+  box-shadow: 0 5.4px 15px rgb(0 0 0 / 3.6%);
+}
+.orbit-compact-heading { margin-bottom: 56px; }
+.orbit-compact-heading > p {
+  margin: 0;
+  font-size: 72px;
+  letter-spacing: -0.065em;
+  line-height: 0.9;
+}
+.orbit-compact-heading > div {
+  max-width: 220px;
+  margin: 28px 0 0;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+}
+
+/* The original's compact layout uses 0px padding and a direct grid. */
+@media (max-width: 799px) {
+  .career-orbit--compact .orbit-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .experience-page-hero h1 { font-size: clamp(68px, 12vw, 100px); }
+}
+@media (max-width: 639px) {
+  .career-orbit--compact .orbit-cards { grid-template-columns: minmax(0, 1fr); }
+  .experience-page-hero-inner { padding-block: 120px 144px; }
+  .experience-page-eyebrow { font-size: 10px; margin-bottom: 28px; }
+  .experience-page-summary { font-size: 14px; max-width: 300px; }
+  .experience-page-scroll { bottom: 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .experience-page-hero { position: relative; }
+  .experience-page-scroll { transition: none; }
+  .orbit-title { will-change: auto; }
+}
