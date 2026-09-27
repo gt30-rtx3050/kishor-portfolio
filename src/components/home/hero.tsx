@@ -104,7 +104,7 @@ export function Hero() {
           </Badge>
         </p>
 
-        <h1 className="mt-8 font-display text-[clamp(2.9rem,9vw,7.5rem)] leading-[1.04] font-normal tracking-[-0.03em]">
+        <h1 className="mt-8 font-display text-[clamp(72px,10.5vw,152px)] leading-[1.04] font-normal tracking-[-0.03em] max-[799px]:text-[clamp(68px,12vw,100px)]">
           {/* React Bits "Tech Text": the name is a canvas, so the entrance mask
               wraps one block instead of per-character spans. The sr-only copy
               keeps the real name in the heading for screen readers and search. */}
