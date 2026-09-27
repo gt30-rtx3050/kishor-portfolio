@@ -108,9 +108,23 @@ export function Hero() {
           {/* React Bits "Tech Text": the name is a canvas, so the entrance mask
               wraps one block instead of per-character spans. The sr-only copy
               keeps the real name in the heading for screen readers and search. */}
-          {/* TechText auto-fits its canvas: grow its width as well as its height
-              and font size, with a viewport cap to avoid clipping on mobile. */}
-          <span className="relative left-1/2 block w-[min(120%,calc(100vw-2rem))] -translate-x-1/2 overflow-hidden pb-[0.06em] -mb-[0.06em]">
+          {/* TechText auto-fits its glyphs to 90% of its own box, so the drawn
+              size follows the box, not font-size. All three of its inputs have
+              to scale by the same factor or one of them caps the others: this
+              frame (120% wide, recentred with left-1/2 + -translate-x-1/2), the
+              frame height (1.04em of the h1 clamp, itself 1.2x larger) and the
+              fontSize ceiling below.
+
+              No viewport cap here, deliberately. Capping the frame at the
+              viewport (calc(100vw-2rem)) is what made the previous pass a
+              near no-op on phones: at 375px it left the frame 343px wide and
+              the name only 5% larger. The cap was guarding against clipping the
+              glyphs, but the glyphs only ever occupy 90% of the frame, and
+              measured across 320-1920px they stay inside the viewport — the
+              tightest is 3.5px of margin per side, at 560px. Whatever does
+              spill past the viewport is the frame's own empty margin, which the
+              section's overflow-hidden trims without touching the letters. */}
+          <span className="relative left-1/2 block w-[120%] -translate-x-1/2 overflow-hidden pb-[0.06em] -mb-[0.06em]">
             <span className="sr-only">{site.name}</span>
             <span data-hero="name" className="block h-[1.04em] will-change-transform" aria-hidden="true">
               <TechText
