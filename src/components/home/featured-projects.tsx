@@ -1,86 +1,150 @@
-import { Link } from "react-router-dom";
-import { Card, CardBody, Chip } from "@heroui/react";
-import { featuredProjects, type Project } from "@/lib/site";
-import { SectionHeading } from "@/components/ui/section-heading";
-import { Reveal } from "@/components/ui/reveal";
-import { ArrowUpRightIcon } from "@/components/ui/icons";
+import { useEffect, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { featuredProjects } from "@/lib/site";
+import { ArrowRightIcon, ArrowUpRightIcon } from "@/components/ui/icons";
 
-/*
-  Project card: HeroUI Card + Chip inside a router Link so the whole card
-  is one keyboard-focusable target. Hover: lift, brighter border, soft glow,
-  image scale (the glow is white-alpha, still on palette).
-*/
-function ProjectCard({ project, index }: { project: Project; index: number }) {
-  return (
-    <Reveal delay={index * 0.1} className="h-full">
-      <Link
-        to={project.href}
-        aria-label={`${project.title}: view project details`}
-        className="group block h-full rounded-2xl"
-      >
-        <Card
-          shadow="none"
-          className="h-full rounded-2xl border border-fg/10 bg-fg/[0.02] transition-[border-color,translate,box-shadow] duration-300 group-hover:-translate-y-1 group-hover:border-fg/30 group-hover:shadow-[0_16px_48px_rgba(255,255,255,0.07)]"
-        >
-          <CardBody className="p-0">
-            <div className="overflow-hidden rounded-t-2xl border-b border-fg/10">
-              <img
-                src={project.image}
-                alt={project.imageAlt}
-                loading="lazy"
-                decoding="async"
-                className="aspect-[16/10] w-full object-cover grayscale transition-transform duration-700 ease-out group-hover:scale-[1.04]"
-              />
-            </div>
-            <div className="flex grow flex-col gap-3 p-6">
-              <div className="flex items-center justify-between gap-3">
-                <h3 className="font-display text-xl font-normal tracking-tight">
-                  {project.title}
-                </h3>
-                <ArrowUpRightIcon className="size-5 shrink-0 text-fg/40 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-fg" />
-              </div>
-              <p className="text-sm font-light leading-relaxed text-fg/60">{project.description}</p>
-              <ul className="mt-1 flex flex-wrap gap-2" aria-label="Technologies used">
-                {project.tags.map((tag) => (
-                  <Chip
-                    key={tag}
-                    size="sm"
-                    variant="bordered"
-                    radius="sm"
-                    classNames={{
-                      base: "border-fg/15 bg-transparent",
-                      content: "px-1.5 text-xs font-medium text-fg/60",
-                    }}
-                  >
-                    {tag}
-                  </Chip>
-                ))}
-              </ul>
-            </div>
-          </CardBody>
-        </Card>
-      </Link>
-    </Reveal>
-  );
-}
+const experiences = [
+  {
+    company: "SB Web Technology",
+    role: "Content Writer",
+    years: "2018–2020",
+    image: featuredProjects[0].image,
+    imageAlt: "Analytics dashboard representing content and performance work",
+  },
+  {
+    company: "KPO & Company",
+    role: "Content Manager",
+    years: "2020–2022",
+    image: featuredProjects[1].image,
+    imageAlt: "Digital commerce experience representing content management",
+  },
+  {
+    company: "Daraz [Alibaba Group]",
+    role: "Content Lead/Digital Marketing",
+    years: "2023–2024",
+    image: featuredProjects[2].image,
+    imageAlt: "Connected conversations representing digital marketing",
+  },
+  {
+    company: "Himalayan Dream Treks [Remote]",
+    role: "SEO Content Manager",
+    years: "2023–2024",
+    image: featuredProjects[0].image,
+    imageAlt: "Analytics dashboard representing SEO content strategy",
+  },
+  {
+    company: "AFC Urgent Care [Remote]",
+    role: "Growth Marketing Manager",
+    years: "2024–2026",
+    image: featuredProjects[1].image,
+    imageAlt: "Digital commerce experience representing growth marketing",
+  },
+];
+
+const wrapOffset = (index: number, active: number) =>
+  ((index - active + experiences.length + 2) % experiences.length) - 2;
 
 export function FeaturedProjects() {
+  const [active, setActive] = useState(2);
+  const [viewportWidth, setViewportWidth] = useState(() => window.innerWidth);
+  const prefersReducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    const updateWidth = () => setViewportWidth(window.innerWidth);
+    window.addEventListener("resize", updateWidth);
+    return () => window.removeEventListener("resize", updateWidth);
+  }, []);
+
+  const cardStep = viewportWidth < 640 ? viewportWidth * 0.56 : Math.min(viewportWidth * 0.21, 300);
+
+  const move = (direction: number) => {
+    setActive((current) => (current + direction + experiences.length) % experiences.length);
+  };
+
   return (
-    <section id="work" aria-labelledby="work-heading" className="scroll-mt-20 border-t border-fg/10">
-      <div className="shell py-24 sm:py-28 lg:py-32">
-        <SectionHeading
-          id="work-heading"
-          eyebrow="Featured Work"
-          title="Selected projects"
-          linkTo="/projects"
-          linkLabel="View all projects"
-        />
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {featuredProjects.map((project, index) => (
-            <ProjectCard key={project.title} project={project} index={index} />
-          ))}
+    <section
+      id="work"
+      aria-labelledby="work-heading"
+      className="experience-section scroll-mt-20 overflow-hidden bg-white text-black"
+    >
+      <div className="experience-heading">
+        <div>
+          <p className="experience-eyebrow">A career in content &amp; growth</p>
+          <h2 id="work-heading">My Experience</h2>
+          <p className="experience-intro">
+            A few of the teams and brands I’ve helped move forward.
+          </p>
+        </div>
+        <div className="experience-controls" aria-label="Experience carousel controls">
+          <span className="experience-count" aria-live="polite">
+            <span>{String(active + 1).padStart(2, "0")}</span> / {String(experiences.length).padStart(2, "0")}
+          </span>
+          <button type="button" onClick={() => move(-1)} aria-label="Previous experience" className="experience-arrow">
+            <ArrowRightIcon className="size-5 rotate-180" />
+          </button>
+          <button type="button" onClick={() => move(1)} aria-label="Next experience" className="experience-arrow">
+            <ArrowRightIcon className="size-5" />
+          </button>
         </div>
       </div>
+
+      <div
+        className="experience-stage"
+        role="region"
+        aria-roledescription="carousel"
+        aria-label="Career experience"
+      >
+        {experiences.map((experience, index) => {
+          const offset = wrapOffset(index, active);
+          const isActive = offset === 0;
+          return (
+            <motion.article
+              key={experience.company}
+              className={`experience-card ${Math.abs(offset) === 2 ? "experience-card--far" : ""} ${isActive ? "experience-card--active" : ""}`}
+              role="group"
+              aria-roledescription="slide"
+              aria-label={`${index + 1} of ${experiences.length}: ${experience.company}`}
+              aria-current={isActive ? "true" : undefined}
+              tabIndex={0}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  setActive(index);
+                }
+              }}
+              initial={false}
+              animate={{
+                x: offset * cardStep,
+                y: Math.abs(offset) === 0 ? 0 : Math.abs(offset) === 1 ? 24 : 54,
+                scale: isActive ? 1 : Math.abs(offset) === 1 ? 0.91 : 0.82,
+                rotate: offset * -2.5,
+                opacity: Math.abs(offset) === 2 ? 0.76 : 1,
+              }}
+              transition={
+                prefersReducedMotion
+                  ? { duration: 0 }
+                  : { type: "spring", stiffness: 190, damping: 24, mass: 0.8 }
+              }
+              style={{ zIndex: 10 - Math.abs(offset) }}
+              onClick={() => setActive(index)}
+            >
+              <div className="experience-image-wrap">
+                <img src={experience.image} alt={experience.imageAlt} loading="lazy" />
+                <span className="experience-image-index">0{index + 1}</span>
+              </div>
+              <div className="experience-card-body">
+                <h3>{experience.company}</h3>
+                <p className="experience-role">{experience.role}</p>
+                <p className="experience-years">{experience.years}</p>
+                <a className="experience-cta" href="#contact" onClick={(event) => event.stopPropagation()}>
+                  Let’s talk <ArrowUpRightIcon className="size-4" />
+                </a>
+              </div>
+            </motion.article>
+          );
+        })}
+      </div>
+      <p className="experience-hint" aria-hidden="true">Select a card or use the arrows to explore</p>
     </section>
   );
 }
