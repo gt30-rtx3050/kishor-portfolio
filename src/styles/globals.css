@@ -107,127 +107,177 @@
   }
 }
 
-/* Full-bleed white experience carousel, intentionally contrasted with the
-   dark portfolio sections around it. */
+/* A native horizontal rail: scroll snap is the source of truth, with a
+   restrained 3D perspective on each card and pagination above the cards. */
 .experience-section {
-  padding: 6.25rem 0 3.5rem;
-  background: white;
+  --experience-card-width: clamp(19rem, 31vw, 27rem);
+  --experience-gap: clamp(0.75rem, 2vw, 2rem);
+  overflow: hidden;
+  padding: clamp(4.5rem, 7vw, 7rem) 0 3rem;
+  background: rgb(248 248 246);
+  color: rgb(23 23 23);
 }
 
 .experience-section :focus-visible {
-  outline-color: rgb(17 17 17);
+  outline: 2px solid rgb(23 23 23);
+  outline-offset: 5px;
 }
 
 .experience-heading {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 2rem;
-  max-width: 90rem;
+  max-width: 48rem;
   margin: 0 auto;
-  padding: 0 clamp(1.5rem, 6vw, 5rem);
+  padding: 0 1.5rem;
+  text-align: center;
 }
 
 .experience-eyebrow {
-  margin: 0 0 1rem;
-  color: rgb(104 104 104);
-  font-size: 0.72rem;
+  margin: 0 0 1.25rem;
+  color: rgb(105 105 105);
+  font-size: 0.68rem;
   font-weight: 500;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.19em;
   text-transform: uppercase;
 }
 
 .experience-heading h2 {
   margin: 0;
-  color: rgb(17 17 17);
   font-family: var(--font-display);
-  font-size: clamp(3rem, 6vw, 5.75rem);
-  line-height: 0.98;
+  font-size: clamp(3.5rem, 6.5vw, 6rem);
+  line-height: 1;
   letter-spacing: -0.04em;
 }
 
 .experience-intro {
-  margin: 1.2rem 0 0;
-  color: rgb(98 98 98);
-  font-size: 0.98rem;
+  margin: 1.25rem 0 0;
+  color: rgb(100 100 100);
+  font-size: 0.95rem;
+  line-height: 1.6;
 }
 
 .experience-controls {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
-  padding-bottom: 0.25rem;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2.5rem 1rem 0;
 }
 
-.experience-count {
-  margin-right: 0.65rem;
-  color: rgb(135 135 135);
-  font-size: 0.78rem;
+.experience-pagination {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.3rem;
+  border: 1px solid rgb(224 224 222);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 75%);
+}
+
+.experience-page,
+.experience-arrow {
+  display: grid;
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  border-radius: 50%;
+  color: rgb(100 100 100);
+  cursor: pointer;
+  transition: color 180ms ease, background 180ms ease, border-color 180ms ease;
+}
+
+.experience-page {
+  border: 0;
+  background: transparent;
+  font-size: 0.7rem;
+  font-weight: 500;
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.08em;
 }
 
-.experience-count span {
-  color: rgb(17 17 17);
+.experience-page:hover {
+  background: rgb(238 238 236);
+  color: rgb(23 23 23);
+}
+
+.experience-page[aria-current="true"] {
+  background: rgb(23 23 23);
+  color: white;
 }
 
 .experience-arrow {
-  display: grid;
-  width: 2.9rem;
-  height: 2.9rem;
-  place-items: center;
-  border: 1px solid rgb(216 216 216);
-  border-radius: 50%;
-  background: white;
-  color: rgb(17 17 17);
-  cursor: pointer;
-  transition: color 180ms ease, background 180ms ease, border-color 180ms ease, transform 180ms ease;
+  border: 1px solid rgb(214 214 212);
+  background: transparent;
+  color: rgb(23 23 23);
 }
 
-.experience-arrow:hover {
-  transform: translateY(-2px);
-  border-color: rgb(17 17 17);
-  background: rgb(17 17 17);
+.experience-arrow:hover:not(:disabled) {
+  border-color: rgb(23 23 23);
+  background: rgb(23 23 23);
   color: white;
+}
+
+.experience-arrow:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
 }
 
 .experience-stage {
   position: relative;
-  height: 39rem;
-  margin-top: 2.25rem;
-  isolation: isolate;
+  display: flex;
+  gap: var(--experience-gap);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  /* End spacers let the first and last cards rest exactly in the center. */
+  padding: 2.5rem max(1rem, calc((100% - var(--experience-card-width)) / 2)) 3rem;
+  cursor: grab;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.experience-stage::-webkit-scrollbar {
+  display: none;
+}
+
+.experience-stage.is-dragging {
+  scroll-snap-type: none;
+  cursor: grabbing;
+}
+
+.experience-slide {
+  flex: 0 0 var(--experience-card-width);
+  min-width: 0;
+  scroll-snap-align: center;
 }
 
 .experience-card {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: min(19vw, 18.25rem);
-  min-width: 13.5rem;
-  height: 33.5rem;
+  height: 100%;
   overflow: hidden;
-  border: 1px solid rgb(228 228 228);
+  border: 1px solid rgb(226 226 223);
   border-radius: 1rem;
   background: white;
-  box-shadow: 0 18px 54px rgb(0 0 0 / 9%);
-  cursor: pointer;
-  transform-origin: 50% 70%;
+  box-shadow: 0 10px 24px rgb(0 0 0 / 4%);
+  backface-visibility: hidden;
+  transform-origin: center;
   transition: box-shadow 250ms ease;
 }
 
 .experience-card--active {
-  box-shadow: 0 28px 70px rgb(0 0 0 / 15%);
-}
-
-.experience-card:hover {
-  box-shadow: 0 30px 76px rgb(0 0 0 / 18%);
+  box-shadow: 0 16px 32px rgb(0 0 0 / 8%);
 }
 
 .experience-image-wrap {
   position: relative;
-  height: 48%;
+  height: clamp(14rem, 20vw, 18rem);
   overflow: hidden;
-  background: rgb(17 17 17);
+  background: rgb(23 23 23);
+}
+
+.experience-image-wrap::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgb(0 0 0 / 30%), transparent 40%, rgb(0 0 0 / 45%));
+  content: "";
+  pointer-events: none;
 }
 
 .experience-image-wrap img {
@@ -235,53 +285,55 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 500ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  pointer-events: none;
 }
 
-.experience-card:hover .experience-image-wrap img,
-.experience-card--active .experience-image-wrap img {
-  transform: scale(1.045);
+.experience-image-index,
+.experience-years {
+  position: absolute;
+  z-index: 1;
+  left: 1.5rem;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.09em;
 }
 
 .experience-image-index {
-  position: absolute;
-  right: 1rem;
-  bottom: 0.9rem;
-  color: white;
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-  text-shadow: 0 1px 12px rgb(0 0 0 / 50%);
+  top: 1.35rem;
+}
+
+.experience-years {
+  bottom: 1.35rem;
+  padding: 0.4rem 0.65rem;
+  border: 1px solid rgb(255 255 255 / 30%);
+  border-radius: 999px;
+  background: rgb(0 0 0 / 30%);
+  backdrop-filter: blur(8px);
 }
 
 .experience-card-body {
   display: flex;
-  min-height: 52%;
+  min-height: 15rem;
   flex-direction: column;
-  padding: 1.45rem 1.35rem 1.3rem;
-}
-
-.experience-years {
-  margin: 0 0 0.85rem;
-  color: rgb(113 113 113);
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-}
-
-.experience-card h3 {
-  margin: 0;
-  color: rgb(17 17 17);
-  font-family: var(--font-display);
-  font-size: clamp(1.55rem, 2.1vw, 2rem);
-  line-height: 1.02;
-  letter-spacing: -0.02em;
+  padding: 1.75rem;
 }
 
 .experience-role {
-  margin: 0.75rem 0 0;
-  color: rgb(88 88 88);
-  font-size: 0.9rem;
-  line-height: 1.45;
+  margin: 0 0 0.8rem;
+  color: rgb(102 102 102);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.experience-card h3 {
+  margin: 0 0 1.5rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 2.75vw, 2.6rem);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
 }
 
 .experience-cta {
@@ -289,10 +341,11 @@
   align-items: center;
   justify-content: space-between;
   margin-top: auto;
-  padding-top: 1.25rem;
-  color: rgb(17 17 17);
-  font-size: 0.78rem;
-  font-weight: 500;
+  padding-top: 1rem;
+  border-top: 1px solid rgb(230 230 227);
+  color: rgb(23 23 23);
+  font-size: 0.75rem;
+  font-weight: 400;
   text-decoration: none;
 }
 
@@ -304,73 +357,89 @@
   transform: translate(2px, -2px);
 }
 
-.experience-hint {
-  margin: -1rem 0 0;
-  color: rgb(130 130 130);
-  font-size: 0.75rem;
-  text-align: center;
+.experience-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: var(--experience-card-width);
+  margin: 0 auto;
 }
 
-@media (max-width: 767px) {
+.experience-hint,
+.experience-count {
+  margin: 0;
+  color: rgb(108 108 108);
+  font-size: 0.7rem;
+}
+
+.experience-hint > span[aria-hidden] {
+  margin-left: 0.5rem;
+}
+
+.experience-count {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.1em;
+}
+
+.experience-count > span:first-child {
+  color: rgb(23 23 23);
+}
+
+@media (max-width: 639px) {
   .experience-section {
-    padding-top: 5rem;
-  }
-
-  .experience-heading {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 1.6rem;
-  }
-
-  .experience-heading h2 {
-    font-size: clamp(3rem, 13vw, 4.5rem);
+    --experience-card-width: min(80vw, 23rem);
+    --experience-gap: 0.25rem;
+    padding-bottom: 2.5rem;
   }
 
   .experience-controls {
-    align-self: flex-end;
-    margin-top: -4.3rem;
-  }
-
-  .experience-intro {
-    max-width: 16rem;
-    font-size: 0.9rem;
-  }
-
-  .experience-stage {
-    height: 35.5rem;
+    gap: 0.5rem;
     margin-top: 2rem;
   }
 
-  .experience-card {
-    width: 70vw;
-    min-width: 0;
-    max-width: 21rem;
-    height: 31rem;
-    border-radius: 0.9rem;
+  .experience-page,
+  .experience-arrow {
+    width: 2.5rem;
+    height: 2.75rem;
   }
 
-  .experience-card--far {
-    opacity: 0 !important;
-    pointer-events: none;
+  .experience-stage {
+    padding-top: 1.75rem;
+    padding-bottom: 2rem;
   }
 
   .experience-card-body {
-    padding: 1.2rem 1.2rem 1.15rem;
+    min-height: 15rem;
+    padding: 1.35rem;
+  }
+}
+
+@media (max-width: 359px) {
+  .experience-controls {
+    gap: 0.375rem;
+    margin-inline: 0.75rem;
   }
 
-  .experience-card h3 {
-    font-size: 1.75rem;
+  .experience-pagination {
+    gap: 0.125rem;
   }
 
-  .experience-hint {
-    margin-top: -0.5rem;
+  .experience-page,
+  .experience-arrow {
+    width: 2.25rem;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .experience-card {
+    transform: none !important;
+  }
+
+  .experience-card,
+  .experience-page,
   .experience-arrow,
-  .experience-image-wrap img,
   .experience-cta svg {
-    transition-duration: 0.01ms;
+    transition: none;
   }
 }
