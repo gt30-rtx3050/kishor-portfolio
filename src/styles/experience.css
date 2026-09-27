@@ -173,10 +173,11 @@
   -webkit-backface-visibility: hidden;
 }
 
+/* Uniform black overlay (0.5 opacity) over the artwork on all five cards. */
 .orbit-card-shade {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgb(0 0 0 / 40%), transparent 26%, rgb(0 0 0 / 30%) 40%, rgb(0 0 0 / 92%) 100%);
+  background: rgb(0 0 0 / 50%);
 }
 
 .orbit-card-meta {
