@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { navLinks, site } from "@/lib/site";
 import { cn } from "@/lib/utils";
+import { SiteLogo } from "@/components/layout/site-logo";
 import { Button } from "@/components/ui/button";
 import {
   ArrowUpRightIcon,
@@ -72,14 +73,7 @@ export function Navbar() {
       )}
     >
       <nav aria-label="Primary" className="shell flex h-16 items-center justify-between">
-        <Link
-          to="/"
-          aria-label={`${site.name}, back to home`}
-          className="font-display text-lg font-normal tracking-tight"
-        >
-          {site.name}
-          <span className="text-fg/40">.</span>
-        </Link>
+        <SiteLogo />
 
         <ul className="hidden items-center gap-1 md:flex">
           {navLinks.map((link) => (
