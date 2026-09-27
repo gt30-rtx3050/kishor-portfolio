@@ -11,7 +11,6 @@ import {
   MailIcon,
   MapPinIcon,
 } from "@/components/ui/icons";
-import { ParticleGrid } from "@/components/background/particle-grid";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -104,17 +103,18 @@ export function Hero() {
       aria-label="Introduction"
       className="relative flex min-h-svh items-center overflow-hidden"
     >
-      {/* Animated dot field, masked toward the center so edges fade out. */}
-      <ParticleGrid className="absolute inset-0 [mask-image:radial-gradient(ellipse_75%_65%_at_50%_45%,black_35%,transparent_100%)]" />
-      {/* Soft vignette keeps text legible over the dots. */}
-      <div
+      <video
         aria-hidden="true"
-        className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_45%,rgba(0,0,0,0.65),transparent_75%)]"
-      />
-      <div
-        aria-hidden="true"
-        className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-bg"
-      />
+        className="absolute inset-0 size-full object-cover"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+      >
+        <source src="https://www.pexels.com/download/video/36703282/" type="video/mp4" />
+      </video>
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-black/50" />
 
       <div ref={contentRef} className="shell relative pb-28 pt-32">
         <p data-hero="fade">
