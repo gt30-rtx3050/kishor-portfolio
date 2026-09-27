@@ -47,7 +47,7 @@ src/
 ## Editing colors, fonts, and copy
 
 - Colors: `src/styles/globals.css` (`@theme` block defines `--color-bg`, `--color-fg`, `--color-muted`, consumed as `bg-bg`, `text-fg`, `text-muted`, ...). These three hex values are also mirrored in `src/lib/tokens.ts`, which feeds `src/heroui.ts` and `src/lib/mui-theme.ts`. Change all three places together.
-- Fonts: self-hosted via Fontsource, imported in `src/main.tsx`. Families are mapped in the same `@theme` block: `--font-sans` (Inter Variable, body) and `--font-display` (Space Grotesk Variable, headlines). To swap a font, change the import and the `--font-*` token; no component edits.
+- Fonts: self-hosted via Fontsource, imported in `src/main.tsx`. Families are mapped in the same `@theme` block: `--font-sans` (Archivo Variable, body + buttons) and `--font-display` (Instrument Serif, headlines). To swap a font, change the import and the `--font-*` token; no component edits.
 - Copy: everything (name, role, email, socials, projects, skills, about text) lives in `src/lib/site.ts` with `PLACEHOLDER` markers on every value to replace.
 - Images: swap the files in `src/assets/projects/` and `src/assets/about/` (keep the filenames, or update the imports at the top of `site.ts`). Alt text placeholders are in `site.ts` too.
 

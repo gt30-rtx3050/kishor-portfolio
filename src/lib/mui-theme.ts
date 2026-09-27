@@ -14,7 +14,7 @@ export const muiTheme = createTheme({
     divider: whiteAlpha(0.14),
   },
   typography: {
-    fontFamily: '"Inter Variable", ui-sans-serif, system-ui, sans-serif',
+    fontFamily: '"Archivo Variable", ui-sans-serif, system-ui, sans-serif',
   },
   components: {
     MuiTooltip: {

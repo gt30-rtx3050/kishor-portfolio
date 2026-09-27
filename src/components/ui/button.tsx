@@ -23,7 +23,7 @@ export interface ButtonProps extends ComponentPropsWithoutRef<"button"> {
 }
 
 const baseClasses =
-  "inline-flex items-center justify-center gap-2 rounded-lg font-medium whitespace-nowrap " +
+  "inline-flex items-center justify-center gap-2 rounded-lg font-sans font-medium whitespace-nowrap " +
   "transition-[color,background-color,border-color,box-shadow,translate] duration-200 " +
   "hover:-translate-y-0.5 active:translate-y-0";
 
