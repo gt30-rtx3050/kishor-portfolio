@@ -20,9 +20,9 @@ npm run lint      # eslint
 src/
   assets/            # placeholder project images + portrait (self-hosted by Vite)
   components/
-    animate-ui/      # Animate UI adaptations: TextReveal, BlurFade
+    animate-ui/      # Animate UI / ReactBits adaptations: TextReveal, BlurFade, TextLoop
     background/      # ReactBits-style ParticleGrid canvas (hero)
-    home/            # Hero, FeaturedProjects, AboutPreview, SkillsStrip, ContactCTA
+    home/            # Hero, PerformanceLoop, FeaturedProjects, AboutPreview, SkillsStrip, ContactCTA
     layout/          # Navbar, Footer, RootLayout, ScrollToTop
     ui/              # Button, Badge, ArrowLink, SectionHeading, Reveal, icons
   lib/               # site.ts (all copy), tokens.ts, mui-theme.ts, utils.ts
@@ -41,9 +41,9 @@ src/
 | Flowbite React | `Footer`, `FooterCopyright`, `FooterIcon`, `FooterTitle`. |
 | MUI (sparingly) | Tooltips on the skills strip. Themed in `src/lib/mui-theme.ts`. |
 | Animate UI (adapted) | `TextReveal` (word masks) and `BlurFade` (skills stagger) in `components/animate-ui/`. |
-| ReactBits (adapted) | `ParticleGrid` interactive dot field in `components/background/`. |
+| ReactBits (adapted) | `ParticleGrid` in the hero and `TextLoop` transition immediately after it. |
 | Framer Motion | All scroll reveals, hover micro-interactions, navbar drawer, page transitions. `MotionConfig reducedMotion="user"` globally. |
-| GSAP + ScrollTrigger | Hero only: entrance timeline (per-character name reveal) and scroll parallax. The two libraries never own the same effect. |
+| GSAP + ScrollTrigger | Hero entrance/parallax plus the ReactBits `TextLoop` path animation. Framer Motion and GSAP never own the same effect. |
 
 ## Editing colors, fonts, and copy
 
@@ -55,7 +55,7 @@ src/
 ## Accessibility and motion
 
 - Semantic landmarks, single h1 per page, heading hierarchy, skip link, focus-visible outlines, aria-labels on icon-only controls, mobile drawer with Escape close, scroll lock, and focus move.
-- `prefers-reduced-motion`: Framer Motion is simplified globally via `MotionConfig`, both text-reveal components render plain text, GSAP timelines are skipped, and the particle field renders one static frame with no loop.
+- `prefers-reduced-motion`: Framer Motion is simplified globally via `MotionConfig`, reveal components skip their entrances, GSAP effects (including `TextLoop`) remain still, and the particle field renders one static frame with no loop.
 - Canvas and decorative layers are `aria-hidden`; split-text headings carry a visually hidden copy for screen readers.
 
 ## Adding the next pages
