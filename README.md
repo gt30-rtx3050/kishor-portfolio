@@ -22,7 +22,7 @@ src/
   components/
     animate-ui/      # Animate UI adaptations: TextReveal, BlurFade
     background/      # ReactBits-style ParticleGrid canvas (hero)
-    experience/      # Orbit career scene + its scroll math
+    experience/      # Experience page: Orbit career scene and the Contour career timeline (+ their math)
     home/            # Hero, FeaturedProjects, AboutPreview, SkillsStrip, ContactCTA
     layout/          # Navbar, Footer, RootLayout, ScrollToTop
     react-bits/      # TechText (React Bits "Tech Text"), used for the hero name
@@ -63,6 +63,16 @@ The name in the hero `<h1>` is drawn by **React Bits "Tech Text"** (`src/compone
 - A visually hidden copy of the name stays in the heading and the canvas is `aria-hidden`, so screen readers and crawlers still get real text.
 - Pointer interactions (hover outline, selection frame, dragging a letter) need a real pointer; touch drags a letter too, and the container is `touch-action: pan-y` so the page still scrolls.
 - With `prefers-reduced-motion` the component skips its idle sweep and renders the static solid wordmark.
+
+## The Experience page
+
+`/projects` is the Experience page. It has three parts:
+
+1. A hero (`experience-page-hero` in `src/styles/experience.css`).
+2. **Orbit** — a frame-accurate rebuild of the Framer component saved as `Orbit Projects.html`. Source values, retained settings and the intentional differences are in `docs/experience-reference.md`; the numbers live in `src/components/experience/orbit-math.ts`.
+3. **Career timeline** — a rebuild of the component saved as `timeline.html` (contour-timeline.framer.website): a ribbon whose arch, marker and stem glide to the selected station while that station's label scales up and the card below brightens. Five company cards sit in one row, one per employer. Values are in `src/components/experience/contour-math.ts`, provenance and differences in `docs/experience-timeline-reference.md`.
+
+Both scenes read the same data file, `src/lib/experiences.ts`: company, role, years, a short station label, the card artwork, and `responsibilities` — the bullet list on each timeline card. Replace the fifteen `Placeholder — …` lines there with the real responsibilities; the layout tolerates two to four lines per card.
 
 ## Accessibility and motion
 
