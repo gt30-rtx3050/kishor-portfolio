@@ -51,7 +51,7 @@
 
 /*
   The reference's `data-rail`: a horizontal scroller with no visible scrollbar.
-  The track inside it is never narrower than five readable cards, so on small
+  The track inside it is never narrower than three readable cards, so on small
   screens the whole timeline (labels, ribbon and cards together) pans sideways.
 */
 .contour-rail {
@@ -263,4 +263,10 @@
   .contour-card { transition: none; }
   .contour-label-years,
   .contour-card { will-change: auto; }
+}
+
+/* Keep each row's labels, animated ribbon and cards in the same coordinate system. */
+.contour-rows {
+  display: grid;
+  gap: clamp(3rem, 6vw, 5rem);
 }

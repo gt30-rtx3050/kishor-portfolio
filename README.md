@@ -70,7 +70,7 @@ The name in the hero `<h1>` is drawn by **React Bits "Tech Text"** (`src/compone
 
 1. A hero (`experience-page-hero` in `src/styles/experience.css`).
 2. **Orbit** — a frame-accurate rebuild of the Framer component saved as `Orbit Projects.html`. Source values, retained settings and the intentional differences are in `docs/experience-reference.md`; the numbers live in `src/components/experience/orbit-math.ts`.
-3. **Career timeline** — a rebuild of the component saved as `timeline.html` (contour-timeline.framer.website): a ribbon whose arch, marker and stem glide to the selected station while that station's label scales up and the card below brightens. Five company cards sit in one row, one per employer. Values are in `src/components/experience/contour-math.ts`, provenance and differences in `docs/experience-timeline-reference.md`.
+3. **Career timeline** — a rebuild of the component saved as `timeline.html` (contour-timeline.framer.website): a ribbon whose arch, marker and stem glide to the selected station while that station's label scales up and the card below brightens. Five company cards sit in rows of three (three above, two below), one per employer. Each row has an aligned ribbon; shared selection and keyboard navigation transfer the active arch and marker between rows. Values are in `src/components/experience/contour-math.ts`, provenance and differences in `docs/experience-timeline-reference.md`.
 
 Both scenes read the same data file, `src/lib/experiences.ts`: company, role, years, a short station label, the card artwork, and `responsibilities` — the bullet list on each timeline card. Replace the fifteen `Placeholder — …` lines there with the real responsibilities; the layout tolerates two to four lines per card.
 
