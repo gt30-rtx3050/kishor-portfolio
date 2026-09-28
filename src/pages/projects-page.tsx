@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { TextReveal } from "@/components/animate-ui/text-reveal";
+import { ContourTimeline } from "@/components/experience/contour-timeline";
 import { OrbitExperience } from "@/components/experience/orbit-experience";
 import { ChevronDownIcon } from "@/components/ui/icons";
 import { site } from "@/lib/site";
@@ -32,6 +33,7 @@ export default function ProjectsPage() {
         </a>
       </section>
       <OrbitExperience />
+      <ContourTimeline />
     </div>
   );
 }
