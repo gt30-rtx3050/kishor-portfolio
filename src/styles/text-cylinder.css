@@ -1,0 +1,12 @@
+/*
+  Text Cylinder — Mattone typeface.
+  Same source the sample (section.html) uses, so the heading renders in the
+  identical font: https://framerusercontent.com/assets/36YJn4FMZntM08iTmJYlBzlA8.woff2
+*/
+@font-face {
+  font-family: "Mattone";
+  src: url("https://framerusercontent.com/assets/36YJn4FMZntM08iTmJYlBzlA8.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
