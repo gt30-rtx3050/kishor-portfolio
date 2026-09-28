@@ -1,11 +1,10 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type RefObject } from "react";
 import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "framer-motion";
 import { Reveal } from "@/components/ui/reveal";
 import { experiences } from "@/lib/experiences";
 import {
   clampIndex,
   CONTOUR,
-  PEAK_Y,
   ribbonPath,
   stationCenter,
   stemPath,
@@ -25,21 +24,31 @@ import "./contour-timeline.css";
   docs/experience-timeline-reference.md.
 
   Two deliberate differences, both asked for by the user:
-  - five company cards laid out in one horizontal row, one per employer;
+  - company cards laid out in rows of three, one per employer;
   - the reference's warm paper palette replaced with the site's black surface
     (the same hues, lifted so they read on black).
 */
 
-export function ContourTimeline() {
-  const count = experiences.length;
-  const railRef = useRef<HTMLDivElement>(null);
-  const labelRefs = useRef<Array<HTMLButtonElement | null>>([]);
-  const [trackWidth, setTrackWidth] = useState(0);
-  const [active, setActive] = useState(0);
-  const reducedMotion = useReducedMotion() ?? false;
+const COLUMNS = 3;
 
+type RowProps = {
+  items: typeof experiences;
+  offset: number;
+  active: number;
+  select: (index: number, focus?: boolean) => void;
+  labelRefs: RefObject<Array<HTMLButtonElement | null>>;
+  onLabelKeyDown: (event: KeyboardEvent<HTMLButtonElement>, index: number) => void;
+};
+
+function TimelineRow({ items, offset, active: selected, select, labelRefs, onLabelKeyDown }: RowProps) {
+  const count = COLUMNS;
+  const active = selected - offset;
+  const isActiveRow = active >= 0 && active < items.length;
+  const railRef = useRef<HTMLDivElement>(null);
+  const [trackWidth, setTrackWidth] = useState(0);
+  const reducedMotion = useReducedMotion() ?? false;
   /*
-    The five cards want ~200px each. Below that the rail itself scrolls
+    Each row has up to three cards at ~200px each. Below that the rail itself scrolls
     horizontally, exactly like the reference's `data-rail` does on narrow
     viewports, so the ribbon and the cards never drift apart.
   */
@@ -62,63 +71,37 @@ export function ContourTimeline() {
   const springX = useSpring(targetX, CONTOUR.spring);
   const peakX = reducedMotion ? targetX : springX;
 
-  const mainPath = useTransform(() => ribbonPath(peakX.get(), trackWidth));
-  const echoPathOne = useTransform(() => ribbonPath(peakX.get(), trackWidth, { echo: 1 }));
-  const echoPathTwo = useTransform(() => ribbonPath(peakX.get(), trackWidth, { echo: 2 }));
-  const stem = useTransform(() => stemPath(peakX.get()));
+  const liftTarget = useMotionValue(isActiveRow ? 1 : 0);
+  const liftSpring = useSpring(liftTarget, CONTOUR.spring);
+  const lift = reducedMotion ? liftTarget : liftSpring;
+  useEffect(() => { liftTarget.set(isActiveRow ? 1 : 0); }, [isActiveRow, liftTarget]);
+  const markerY = useTransform(lift, value => CONTOUR.baselineY - CONTOUR.humpHeight * value);
 
-  const select = useCallback(
-    (index: number, focus = false) => {
-      const next = clampIndex(index, count);
-      setActive(next);
-      if (focus) labelRefs.current[next]?.focus();
-    },
-    [count],
-  );
+  const mainPath = useTransform(() => ribbonPath(peakX.get(), trackWidth, { peakY: markerY.get() }));
+  const echoPathOne = useTransform(() => ribbonPath(peakX.get(), trackWidth, { echo: 1, peakY: markerY.get() }));
+  const echoPathTwo = useTransform(() => ribbonPath(peakX.get(), trackWidth, { echo: 2, peakY: markerY.get() }));
+  const stem = useTransform(() => stemPath(peakX.get(), CONTOUR.stripHeight, markerY.get()));
 
   // Follow the selected station. The first measurement is applied without
   // animating so the ribbon does not fly in from the left edge on load.
   const settled = useRef(false);
   useEffect(() => {
-    if (trackWidth <= 0) return;
+    if (trackWidth <= 0 || !isActiveRow) return;
     const x = stationCenter(active, count, trackWidth);
     if (!settled.current) {
       springX.set(x);
       settled.current = true;
     }
     targetX.set(x);
-  }, [active, count, springX, targetX, trackWidth]);
+  }, [active, count, isActiveRow, springX, targetX, trackWidth]);
 
   // Keep the selected card in view when the rail is scrollable (phone layouts).
   useEffect(() => {
     const rail = railRef.current;
-    if (!rail || trackWidth <= rail.clientWidth) return;
+    if (!rail || !isActiveRow || trackWidth <= rail.clientWidth) return;
     const left = stationCenter(active, count, trackWidth) - rail.clientWidth / 2;
     rail.scrollTo({ left: Math.max(left, 0), behavior: reducedMotion ? "auto" : "smooth" });
-  }, [active, count, reducedMotion, trackWidth]);
-
-  // Roving tabindex: one station is tabbable, the arrow keys move between them.
-  const onLabelKeyDown = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
-    switch (event.key) {
-      case "ArrowRight":
-      case "ArrowDown":
-        event.preventDefault();
-        select(stepIndex(index, count, 1), true);
-        return;
-      case "ArrowLeft":
-      case "ArrowUp":
-        event.preventDefault();
-        select(stepIndex(index, count, -1), true);
-        return;
-      case "Home":
-      case "End":
-        event.preventDefault();
-        select(event.key === "Home" ? 0 : count - 1, true);
-        return;
-      default:
-        return;
-    }
-  };
+  }, [active, count, isActiveRow, reducedMotion, trackWidth]);
 
   const cellStyle: CSSProperties = {
     // The reference sizes stations at `cell − 14` with a 7px inset either side.
@@ -126,43 +109,27 @@ export function ContourTimeline() {
   };
 
   return (
-    <section id="career-timeline" className="contour" aria-labelledby="contour-heading">
-      <div className="shell">
-        <Reveal>
-          <p className="contour-eyebrow">Career timeline · 2018–2026</p>
-          <h2 id="contour-heading" className="contour-heading">
-            Five companies, one thread.
-          </h2>
-          <p className="contour-summary">
-            Every role added a layer — writing, editing, leading, growing. Select a chapter and the
-            ribbon follows it.
-          </p>
-        </Reveal>
-      </div>
-
-      <div className="shell contour-stage">
-        <Reveal delay={0.1}>
           <div className="contour-rail" ref={railRef} data-rail="true">
             <div
               className="contour-track"
               style={{ width: trackWidth > 0 ? trackWidth : undefined }}
             >
               <div className="contour-labels" role="group" aria-label="Career milestones" style={cellStyle}>
-                {experiences.map((experience, index) => {
+                {items.map((experience, index) => {
                   const isActive = index === active;
                   return (
                     <button
                       key={experience.company}
                       ref={node => {
-                        labelRefs.current[index] = node;
+                        labelRefs.current[offset + index] = node;
                       }}
                       type="button"
                       className={`contour-label${isActive ? " is-active" : ""}`}
                       tabIndex={isActive ? 0 : -1}
                       aria-current={isActive ? "step" : undefined}
                       aria-label={`${experience.years}: ${experience.company}`}
-                      onClick={() => select(index)}
-                      onKeyDown={event => onLabelKeyDown(event, index)}
+                      onClick={() => select(offset + index)}
+                      onKeyDown={event => onLabelKeyDown(event, offset + index)}
                     >
                       {/*
                         Reference station: the year is the 34px label and carries
@@ -227,7 +194,7 @@ export function ContourTimeline() {
                       The reference hides a station's dot while it is active —
                       the marker circle takes that job over here too.
                     */}
-                    {experiences.map((experience, index) => (
+                    {items.map((experience, index) => (
                       <motion.circle
                         key={experience.company}
                         className="contour-station-dot"
@@ -242,6 +209,7 @@ export function ContourTimeline() {
                         transition={CONTOUR.spring}
                       />
                     ))}
+                    <motion.g style={{ opacity: lift }}>
                     <motion.path
                       d={stem}
                       className="contour-stem"
@@ -251,35 +219,36 @@ export function ContourTimeline() {
                     <motion.circle
                       className="contour-marker"
                       cx={peakX}
-                      cy={PEAK_Y}
+                      cy={markerY}
                       r={CONTOUR.markerRadius}
                       strokeWidth={CONTOUR.markerStrokeWidth}
                     />
                     <motion.circle
                       className="contour-marker-dot"
                       cx={peakX}
-                      cy={PEAK_Y}
+                      cy={markerY}
                       r={CONTOUR.markerDotRadius}
                     />
+                    </motion.g>
                   </>
                 ) : null}
               </svg>
 
               <div className="contour-cards" role="list" aria-label="Companies" style={cellStyle}>
-                {experiences.map((experience, index) => {
+                {items.map((experience, index) => {
                   const isActive = index === active;
                   return (
                     <motion.article
                       key={experience.company}
                       role="listitem"
                       className={`contour-card${isActive ? " is-active" : ""}`}
-                      onClick={() => select(index)}
+                      onClick={() => select(offset + index)}
                       initial={false}
                       animate={{ y: isActive ? -8 : 0, scale: isActive ? 1.03 : 1 }}
                       transition={CONTOUR.spring}
                     >
                       <div className="contour-card-meta">
-                        <span>{String(index + 1).padStart(2, "0")}</span>
+                        <span>{String(offset + index + 1).padStart(2, "0")}</span>
                         <span>{experience.years}</span>
                       </div>
                       <h3>{experience.company}</h3>
@@ -309,9 +278,77 @@ export function ContourTimeline() {
               </div>
             </div>
           </div>
+  );
+}
+
+export function ContourTimeline() {
+  const count = experiences.length;
+  const [active, setActive] = useState(0);
+  const labelRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const select = useCallback(
+    (index: number, focus = false) => {
+      const next = clampIndex(index, count);
+      setActive(next);
+      if (focus) labelRefs.current[next]?.focus();
+    },
+    [count],
+  );
+
+  // Roving tabindex: one station is tabbable, the arrow keys move between them.
+  const onLabelKeyDown = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
+    switch (event.key) {
+      case "ArrowRight":
+      case "ArrowDown":
+        event.preventDefault();
+        select(stepIndex(index, count, 1), true);
+        return;
+      case "ArrowLeft":
+      case "ArrowUp":
+        event.preventDefault();
+        select(stepIndex(index, count, -1), true);
+        return;
+      case "Home":
+      case "End":
+        event.preventDefault();
+        select(event.key === "Home" ? 0 : count - 1, true);
+        return;
+      default:
+        return;
+    }
+  };
+
+  return (
+    <section id="career-timeline" className="contour" aria-labelledby="contour-heading">
+      <div className="shell">
+        <Reveal>
+          <p className="contour-eyebrow">Career timeline · 2018–2026</p>
+          <h2 id="contour-heading" className="contour-heading">
+            Five companies, one thread.
+          </h2>
+          <p className="contour-summary">
+            Every role added a layer — writing, editing, leading, growing. Select a chapter and the
+            ribbon follows it.
+          </p>
         </Reveal>
       </div>
 
+      <div className="shell contour-stage">
+        <Reveal delay={0.1}>
+          <div className="contour-rows">
+            {Array.from({ length: Math.ceil(count / COLUMNS) }, (_, row) => (
+              <TimelineRow
+                key={row}
+                items={experiences.slice(row * COLUMNS, (row + 1) * COLUMNS)}
+                offset={row * COLUMNS}
+                active={active}
+                select={select}
+                labelRefs={labelRefs}
+                onLabelKeyDown={onLabelKeyDown}
+              />
+            ))}
+          </div>
+        </Reveal>
+      </div>
       <p className="sr-only" role="status" aria-live="polite">
         {experiences[active].company}, {experiences[active].years} selected.
       </p>
